@@ -2,10 +2,9 @@ import React from 'react';
 import * as BooksAPI from './BooksAPI';
 import './App.css';
 import { Route,Link } from 'react-router-dom';
-import CurrentlyReading from './components/CurrentlyReading';
-import WantToRead from './components/WantToRead';
-import Read from './components/Read';
+import Shelf from './components/Shelf';
 import Search from './components/Search';
+
 
 /**
  * TODO: Instead of using this state variable to keep track of which page
@@ -16,60 +15,20 @@ import Search from './components/Search';
 
 class BooksApp extends React.Component {
   state = {
-    currentlyReading: [],
-    wantToReading: [],
-    read: [],
     books: []
   }
 
   componentDidMount(){
-    this.getAllBooks();
-  }
-
-  getAllBooks = () => {
     BooksAPI.getAll().then(books => this.setState({books}))
   }
 
-  addToList = (book, nameOfList) => {
-    if(nameOfList === 'currentlyReading'){
-      const newList = this.state.currentlyReading.concat([book])
-      this.setState({
-        currentlyReading : newList
+  updateList = (book, newShelf) => {
+    BooksAPI.update(book,newShelf).then(() => {
+      book.shelf = newShelf
+      this.setState(state => ({
+      books: state.books.filter(b => b.id !== book.id).concat([ book ])
       })
-    }
-    else if(nameOfList === 'wantToRead'){
-      const newList = this.state.wantToReading.concat([book])
-      this.setState({
-        wantToReading : newList
-      })
-    }
-    else if(nameOfList === 'read'){
-      const newList = this.state.read.concat([book])
-      this.setState({
-        read : newList
-      })
-    }
-  }
-
-  removeFromList = (book, nameOfList) => {
-    if(nameOfList === 'currentlyReading'){
-      const newList = this.state.currentlyReading.filter(selectedBook => book.title !== selectedBook.title)
-      this.setState({
-        currentlyReading : newList
-      })
-    }
-    else if(nameOfList === 'wantToRead'){
-      const newList = this.state.wantToReading.filter(selectedBook=> book.title !== selectedBook.title)
-      this.setState({
-        wantToReading : newList
-      })
-    }
-    else{
-      const newList = this.state.read.filter(selectedBook => book.title !== selectedBook.title)
-      this.setState({
-        read : newList
-      })
-    }
+    )})
   }
 
     render() {
@@ -83,11 +42,13 @@ class BooksApp extends React.Component {
                 </div>
                 <div className="list-books-content">
                   <div>
-                    <CurrentlyReading currentlyReading = {this.state.books.filter(book => book.shelf === 'currentlyReading')} update = {BooksAPI.update} get = {BooksAPI.get} addToList = {this.addToList} removeFromList = {this.removeFromList}/>
 
-                    <WantToRead wantToReading = {this.state.wantToReading} update = {BooksAPI.update} get = {BooksAPI.get} addToList = {this.addToList} removeFromList = {this.removeFromList}/>
+                    <Shelf state = 'currentlyReading' books = {this.state.books.filter(book => book.shelf === 'currentlyReading')} updateList = {this.updateList}/>
 
-                    <Read read = {this.state.read} update = {BooksAPI.update} get = {BooksAPI.get} addToList = {this.addToList} removeFromList = {this.removeFromList}/>
+                    <Shelf state = 'wantToRead' books = {this.state.books.filter(book => book.shelf === 'wantToRead')} updateList = {this.updateList}/>
+
+                    <Shelf state = 'read' books = {this.state.books.filter(book => book.shelf === 'read')} updateList = {this.updateList}/>
+
                   </div>
                 </div>
                 <div className="open-search">
@@ -100,7 +61,7 @@ class BooksApp extends React.Component {
         </Route>
 
         <Route exact path = '/search'>
-        <Search search = {BooksAPI.search} update = {BooksAPI.update} getAllBooks = {this.getAllBooks} get = {BooksAPI.get} addToList = {this.addToList} removeFromList = {this.removeFromList}/>
+        <Search search = {BooksAPI.search} update = {BooksAPI.update} getAllBooks = {this.getAllBooks} get = {BooksAPI.get} updateList = {this.updateList}/>
         </Route>
       </>
     )}

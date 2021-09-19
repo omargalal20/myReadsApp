@@ -53,7 +53,7 @@ const Search = props => {
             <div className="search-books-results">
                 <ol className="books-grid">
                   {
-                    books.error !== 'empty query'  ? books.map((book, index) => <Book key={index} book={book} state = 'search' selected = {props.get(book.id)} update = {props.update} addToList = {props.addToList}/>) : <li>No Available Books</li>
+                    books.error !== 'empty query'  ? books.map((book, index) => <Book key={index} book={book} state = 'search' selected = {props.get(book.id)} update = {props.update} updateList = {props.updateList}/>) : <li>No Available Books</li>
                   }
                 </ol>
             </div>
