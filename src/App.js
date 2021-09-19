@@ -1,7 +1,8 @@
 import React from 'react';
 import * as BooksAPI from './BooksAPI';
 import './App.css';
-import { Route,Link } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
+import Shelves from './components/Shelves';
 import Shelf from './components/Shelf';
 import Search from './components/Search';
 
@@ -34,37 +35,23 @@ class BooksApp extends React.Component {
     render() {
       return (
       <>
-        <Route exact path = '/'>
-        <div className="app">
-              <div className="list-books">
-                <div className="list-books-title">
-                  <h1>MyReads</h1>
-                </div>
-                <div className="list-books-content">
-                  <div>
+        <Switch>
+          <Route exact path = '/'>
+            <Shelves>
+              <Shelf shelf = 'Currently Reading' state = 'currentlyReading' books = {this.state.books.filter(book => book.shelf === 'currentlyReading')} updateList = {this.updateList}/>
+                    
+              <Shelf shelf = 'Want To Read' state = 'wantToRead' books = {this.state.books.filter(book => book.shelf === 'wantToRead')} 
+              updateList = {this.updateList}/>
+                    
+              <Shelf shelf = 'Read' state = 'read' books = {this.state.books.filter(book => book.shelf === 'read')} 
+              updateList = {this.updateList}/>
+            </Shelves>
+          </Route>
 
-                    <Shelf shelf = 'Currently Reading' state = 'currentlyReading' books = {this.state.books.filter(book => book.shelf === 'currentlyReading')} updateList = {this.updateList}/>
-
-                    <Shelf shelf = 'Want To Read' state = 'wantToRead' books = {this.state.books.filter(book => book.shelf === 'wantToRead')} 
-                    updateList = {this.updateList}/>
-
-                    <Shelf shelf = 'Read' state = 'read' books = {this.state.books.filter(book => book.shelf === 'read')} 
-                    updateList = {this.updateList}/>
-
-                  </div>
-                </div>
-                <div className="open-search">
-                  <Link to='/search'>
-                    <button></button>
-                  </Link>
-                </div>
-              </div>
-        </div>
-        </Route>
-
-        <Route exact path = '/search'>
-        <Search search = {BooksAPI.search} get = {BooksAPI.get} updateList = {this.updateList}/>
-        </Route>
+          <Route exact path = '/search'>
+          <Search search = {BooksAPI.search} get = {BooksAPI.get} updateList = {this.updateList}/>
+          </Route>
+        </Switch>
       </>
     )}
 }
