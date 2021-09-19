@@ -12,15 +12,7 @@ const Book = props => {
 
     const handleSubmit = event => {
         event.preventDefault()
-        if(event.target.value === 'currentlyReading'){
-            props.updateList(props.book, 'currentlyReading')
-        }
-        else if(event.target.value === 'wantToRead'){
-            props.updateList(props.book, 'wantToRead')
-        }
-        else if(event.target.value === 'read'){
-            props.updateList(props.book, 'read')
-        }
+        props.updateList(props.book, event.target.value)
     }
 
     return(
@@ -40,7 +32,7 @@ const Book = props => {
                   </div>
                 </div>
                 <div className="book-title">{title}</div>
-                <div className="book-authors">{authors}</div>
+                <div className="book-authors">{Array.isArray(authors)?authors.join():authors}</div>
             </div>
         </li>
     )
