@@ -18,7 +18,8 @@ class BooksApp extends React.Component {
   state = {
     currentlyReading: [],
     wantToReading: [],
-    read: []
+    read: [],
+    books: []
   }
 
   componentDidMount(){
@@ -26,9 +27,7 @@ class BooksApp extends React.Component {
   }
 
   getAllBooks = () => {
-    BooksAPI.getAll().then(books=>books.forEach((book)=>{
-      this.addToList(book,book.shelf)
-    }))
+    BooksAPI.getAll().then(books => this.setState({books}))
   }
 
   addToList = (book, nameOfList) => {
@@ -84,7 +83,7 @@ class BooksApp extends React.Component {
                 </div>
                 <div className="list-books-content">
                   <div>
-                    <CurrentlyReading currentlyReading = {this.state.currentlyReading} update = {BooksAPI.update} get = {BooksAPI.get} addToList = {this.addToList} removeFromList = {this.removeFromList}/>
+                    <CurrentlyReading currentlyReading = {this.state.books.filter(book => book.shelf === 'currentlyReading')} update = {BooksAPI.update} get = {BooksAPI.get} addToList = {this.addToList} removeFromList = {this.removeFromList}/>
 
                     <WantToRead wantToReading = {this.state.wantToReading} update = {BooksAPI.update} get = {BooksAPI.get} addToList = {this.addToList} removeFromList = {this.removeFromList}/>
 
