@@ -43,11 +43,11 @@ class BooksApp extends React.Component {
                 <div className="list-books-content">
                   <div>
 
-                    <Shelf state = 'currentlyReading' books = {this.state.books.filter(book => book.shelf === 'currentlyReading')} updateList = {this.updateList}/>
+                    <Shelf shelf = 'Currently Reading' state = 'currentlyReading' books = {this.state.books.filter(book => book.shelf === 'currentlyReading')} updateList = {this.updateList}/>
 
-                    <Shelf state = 'wantToRead' books = {this.state.books.filter(book => book.shelf === 'wantToRead')} updateList = {this.updateList}/>
+                    <Shelf shelf = 'Want To Read' state = 'wantToRead' books = {this.state.books.filter(book => book.shelf === 'wantToRead')} updateList = {this.updateList}/>
 
-                    <Shelf state = 'read' books = {this.state.books.filter(book => book.shelf === 'read')} updateList = {this.updateList}/>
+                    <Shelf shelf = 'Read' state = 'read' books = {this.state.books.filter(book => book.shelf === 'read')} updateList = {this.updateList}/>
 
                   </div>
                 </div>
